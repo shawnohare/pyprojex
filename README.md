@@ -166,4 +166,5 @@ or specified in a `requirements.txt` file) can in turn point to a specific index
 17. [Merge setup.cfg into pyproject.toml](https://github.com/pypa/setuptools/issues/1160)
 18. [Support pyproject.toml](https://github.com/pypa/setuptools/issues/1688)
 19. [Single sourcing version](https://packaging.python.org/guides/single-sourcing-package-version/)
+20. [PEP 582: Local packages dir](https://www.python.org/dev/peps/pep-0582)
 
