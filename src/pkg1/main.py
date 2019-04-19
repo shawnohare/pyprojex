@@ -13,8 +13,8 @@ _pkg_data = resource_string(__name__, 'data/pkg1.dat')
 try:
     _sys_data = open(sys.prefix + '/data/data1.dat').read()
 except Exception as exc:
-    print(exc)
-    _sys_data = '(In editable mode?) Unable to load data file: data/data1.dat'
+    print('Sys data load error:', exc)
+    _sys_data = 'System data: (In editable mode?) Unable to load data file: data/data1.dat'
 
 
 def hello():
