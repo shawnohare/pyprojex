@@ -79,7 +79,7 @@ servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
 setup.py:
-	printf 'from setuptools import setup;setup()' > setup.py
+	printf '# Auto-generated to allow editable installs.\nfrom setuptools import setup;setup()' > setup.py
 
 # release: dist ## package and upload a release
 #	twine upload dist/*
