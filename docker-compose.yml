@@ -1,0 +1,91 @@
+# Example docker-compose file
+# TODO: Commneted out services require some testing to ensure they work.
+# TODO: Re-work the web dockerfile. Can likely be included directly in the
+# builder docker file as an additional stage.
+version: "3.8"
+services:
+  # Dev service block exists to rapidly test configuration changes.
+  # dev:
+  #   build: docker/dev
+  #   image: dev:tmp
+  #   container_name: dev-tmp
+  #   command: python work.py
+  #   volumes:
+  #     # To use /data as source must list it as shareable in docker app.
+  #     - data/:/app/data/
+  #     # NOTE: No real need to use named volume if /data is being shared, as
+  #     # the path is already the name.
+  #     # - type: volume
+  #     #   source: data-volume
+  #     #   target: /app/data
+  #     # - data-volume:/app/data
+  #     # - data-volume:srv
+  #     # - ./data:/app/data/
+  # web:
+  #   build:
+  #     context: .
+  #     dockerfile: docker/web/Dockerfile
+  #   image: app:prod
+  #   container_name:prod-app
+  #   command: gunicorn -w 20 --bind 0.0.0.0:5000 app:app
+  #   expose:
+  #     - 5000
+  #   volumes:
+  #     # To use /data as source must list it as shareable in docker app.
+  #     - data/:/app/data
+  # nginx:
+  #   build: docker/nginx
+  #   image: nginx:prod
+  #   container_name: prod-nginx
+  #   ports:
+  #     - 5000:80
+  #   depends_on:
+  #     - web
+  # production base image.
+  prod:
+    build:
+      context: .
+      dockerfile: docker/builder/Dockerfile
+      target: prod
+    image: mlpexsearch:prod
+    # container_name: mlpexsearch-base
+    restart: always
+  # dev base image.
+  dev:
+    build:
+      context: .
+      dockerfile: docker/builder/Dockerfile
+      target: dev
+    image: mlpexsearch:dev
+    # container_name: mlpexsearch-dev
+    restart: always
+  test:
+    build:
+      context: .
+      dockerfile: docker/builder/Dockerfile
+      target: test
+    image: mlpexsearch:test
+    # restart: always
+    volumes:
+      - ./src:/home/app/proj/src
+      - ./bin:/home/app/proj/bin
+      - ./tests:/home/app/proj/tests
+    command: bash /home/app/proj/bin/pytest.sh
+  lint:
+    build:
+      context: .
+      dockerfile: docker/builder/Dockerfile
+      target: test
+    image: mlpexsearch:lint
+    # restart: always
+    volumes:
+      - ./src:/home/app/proj/src
+      - ./bin:/home/app/proj/bin
+      - ./tests:/home/app/proj/tests
+    command: bash /home/app/proj/bin/lint.sh
+# volumes:
+#   data-volume:
+#     driver: local
+#     driver_opts:
+#       device: /data/app
+
